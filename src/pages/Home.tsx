@@ -6,7 +6,7 @@ import TodoList from './TodoList'
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query'
 import { fetchTodoList, createTask} from '../api'
 import { useNavigate } from 'react-router-dom'
-
+import { v4 as uuidv4 } from 'uuid';
 const Home = () => {
 const queryClient = useQueryClient()
 const navigate =useNavigate()
@@ -21,7 +21,7 @@ const navigate =useNavigate()
 
     const handleSubmitForm: SubmitHandler<IFormInputs> = (data) => {
         createTaskMutation.mutate({
-            id:taskList.length++,
+            id:uuidv4(),
             title:data.taskContent,
         })
          return navigate('/')

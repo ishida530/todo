@@ -3,7 +3,7 @@ export interface IFormInputs {
   }
 
   export interface Itask {
-      id?: number,
+      id?: string,
       title: string,
       status?:TaskStatus,
   }

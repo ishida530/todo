@@ -3,8 +3,8 @@ import { Itask, TaskStatus } from "./types";
 export const fetchTodoList = async () => {
   try {
     const request = await fetch('http://localhost:3000/tasks')
-    const response = await request.json()
-    return response
+    return request.json()
+
   } catch (error) {
     console.log(error)
   }
@@ -19,14 +19,14 @@ export const createTask = async (newTask: Itask) => {
         "Content-Type": "application/json",
       },
     })
-    const response = await request.json()
-    return response
+    return request.json()
+
   } catch (error) {
     console.log(error)
   }
 }
 export const updateTask = async (updateTask: Itask) => {
-  console.log('updateTask w fetchu',updateTask)
+  console.log('updateTask w fetchu', updateTask)
   try {
     const request = await fetch(`http://localhost:3000/tasks/${updateTask.id}`, {
       method: "PUT",
@@ -35,10 +35,20 @@ export const updateTask = async (updateTask: Itask) => {
         "Content-Type": "application/json",
       },
     })
-    const response = await request.json()
-    return response
+    return request.json()
+
   } catch (error) {
     console.log(error)
   }
 }
 
+export const deleteTask = async (id:string) => {
+  try {
+    const request = await fetch(`http://localhost:3000/tasks/${id}`, {
+      method: "DELETE"
+    })
+    return request.json()
+  } catch (error) {
+    console.log(error)
+  }
+}

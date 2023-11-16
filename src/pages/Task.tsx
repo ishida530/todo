@@ -5,7 +5,7 @@ import TaskForm from '../components/TaskForm'
 import { error } from 'console'
 import { SubmitHandler } from 'react-hook-form'
 import { useMutation, isError, useQueryClient } from 'react-query'
-import { updateTask } from '../api'
+import { deleteTask, updateTask } from '../api'
 
 interface ITaskProps {
   task: Itask,
@@ -23,9 +23,7 @@ const Task = ({ task,handleUpdate }: ITaskProps) => {
         setIsEdit(false)
     },
   })
-
-
-  
+ 
   const handleUpdateForm: SubmitHandler<IFormInputs> = (updatedTask) => {
     updateTaskMutation.mutate({
         id:task.id,
@@ -33,7 +31,16 @@ const Task = ({ task,handleUpdate }: ITaskProps) => {
     })
      return navigate('/')
 }
-
+const deleteTaskMutation = useMutation({
+  mutationFn: deleteTask,
+  onSuccess() {
+      queryClient.invalidateQueries({queryKey:['todos']})
+  },
+})
+const handleDeleteTask = (id:string) => {
+  deleteTaskMutation.mutate(id)
+   return navigate('/')
+}
   const [isEdit,setIsEdit]=useState(false)
 
   const { title, id, status } = task
@@ -42,7 +49,7 @@ const Task = ({ task,handleUpdate }: ITaskProps) => {
       <li ><TaskForm updateValue={task} onSubmit={(e)=>handleUpdateForm(e)}/> </li>
     )
   } else return (
-    <li >{title} <Link to={`/task/${id}/edit`} onClick={()=>setIsEdit(!isEdit)}>Edytuj</Link></li>
+    <li >{title} <Link to={`/task/${id}/edit`} onClick={()=>setIsEdit(!isEdit)}>Edytuj</Link> <button type='button' onClick={()=>handleDeleteTask(id!)}>Usuń</button></li>
   )
 }
 
