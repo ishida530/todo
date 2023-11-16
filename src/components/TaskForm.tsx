@@ -1,36 +1,43 @@
-import React from 'react'
+import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form';
+import { IFormInputs, Itask } from '../types';
+import * as yup from "yup"
 
-
-export interface TaskFormData {
-    task: string;
+interface ITaskForm {
+    onSubmit: (data: IFormInputs) => void,
+    updateValue?: Itask
 }
 
 
-const TaskForm = ({ onSubmit }: { onSubmit: (data: TaskFormData) => void }) => {
-    const { handleSubmit, control } = useForm<TaskFormData>();
-
-    const submitForm = (data:TaskFormData) => {
-        onSubmit(data);
-    };
-
+const TaskForm = ({ onSubmit, updateValue }: ITaskForm) => {
+    const schema = yup
+        .object({
+            taskContent: yup.string().required().min(3, 'minimum 3 znaki'),
+        })
+        .required()
+    const {
+        setValue,
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<IFormInputs>({
+        resolver: yupResolver(schema),
+    })
+    useEffect(() => {
+        if (updateValue) {
+            console.log(updateValue)
+            setValue('taskContent', updateValue.title)
+        }
+    }, []);
     return (
-        <form onSubmit={handleSubmit(submitForm)}>
-            <div>
-                <label>Treść zadania</label>
-                <Controller
-                    name="task"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => <input {...field} />}
-                />
-            </div>
-
-            {/* Inne pola formularza, jeśli są potrzebne */}
-
-            <button type="submit">Zapisz zmiany</button>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <label>Nazwa zadania</label>
+            <input {...register("taskContent")} />
+            {errors.taskContent && <p>{errors.taskContent.message}</p>}
+            <input type="submit" />
         </form>
     )
 }
 
-export default TaskForm
+export default TaskForm;

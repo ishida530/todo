@@ -1,5 +1,5 @@
 import React from 'react'
-import TaskForm, { TaskFormData } from '../components/TaskForm'
+import TaskForm from '../components/TaskForm'
 
 
 
@@ -9,14 +9,10 @@ interface EditTaskProps {
 }
 
 const EditTask = () => {
-    const onSubmit = (data: TaskFormData) => {
-        console.log('data wysylka', data)
-        // Obsługa edycji zadania, np. wywołanie funkcji do zapisu zmian
-    };
+
     return (
         <div>
             <h2>Edycja zadania</h2>
-            <TaskForm onSubmit={onSubmit} />
         </div>
     )
 }

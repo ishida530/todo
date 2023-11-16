@@ -1,8 +1,48 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { IFormInputs, Itask, TaskStatus } from '../types'
+import TaskForm from '../components/TaskForm'
+import { error } from 'console'
+import { SubmitHandler } from 'react-hook-form'
+import { useMutation, isError, useQueryClient } from 'react-query'
+import { updateTask } from '../api'
 
-const Task = () => {
-  return (
-    <div>Task</div>
+interface ITaskProps {
+  task: Itask,
+  handleUpdate?: (updateTask:Itask) => void,
+}
+
+const Task = ({ task,handleUpdate }: ITaskProps) => {
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+
+  const updateTaskMutation = useMutation({
+    mutationFn: (updatedTask:Itask)=>updateTask(updatedTask),
+    onSuccess() {
+        queryClient.invalidateQueries({queryKey:['todos']})
+        setIsEdit(false)
+    },
+  })
+
+
+  
+  const handleUpdateForm: SubmitHandler<IFormInputs> = (updatedTask) => {
+    updateTaskMutation.mutate({
+        id:task.id,
+        title:updatedTask.taskContent,
+    })
+     return navigate('/')
+}
+
+  const [isEdit,setIsEdit]=useState(false)
+
+  const { title, id, status } = task
+  if (isEdit) {
+    return (
+      <li ><TaskForm updateValue={task} onSubmit={(e)=>handleUpdateForm(e)}/> </li>
+    )
+  } else return (
+    <li >{title} <Link to={`/task/${id}/edit`} onClick={()=>setIsEdit(!isEdit)}>Edytuj</Link></li>
   )
 }
 
