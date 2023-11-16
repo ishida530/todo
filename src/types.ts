@@ -1,5 +1,6 @@
 export interface IFormInputs {
-    taskContent: string
+    taskContent: string,
+    id?:string
   }
 
   export interface Itask {

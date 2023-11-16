@@ -1,38 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import TaskForm from '../components/TaskForm'
-import { SubmitHandler } from 'react-hook-form'
-import { IFormInputs, Itask, TaskStatus } from '../types'
-import TodoList from './TodoList'
-import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query'
-import { fetchTodoList, createTask} from '../api'
-import { useNavigate } from 'react-router-dom'
-import { v4 as uuidv4 } from 'uuid';
+import TaskForm from "../components/TaskForm";
+import TodoList from "../components/TodoList";
+import { useTaskList } from "../hooks/useTaskList";
 const Home = () => {
-const queryClient = useQueryClient()
-const navigate =useNavigate()
-    const [taskList, setTaskList] = useState<Itask[] | []>([])
+  const { handleSubmitForm } = useTaskList();
 
-    const createTaskMutation = useMutation({
-        mutationFn: (newTask:Itask)=>createTask(newTask),
-        onSuccess(data, variables, context) {
-            queryClient.invalidateQueries({queryKey:['todos']})
-        },
-      })
+  return (
+    <div>
+      <h1>TODO APP</h1>
+      <TaskForm onSubmit={handleSubmitForm} />
+      <TodoList />
+    </div>
+  );
+};
 
-    const handleSubmitForm: SubmitHandler<IFormInputs> = (data) => {
-        createTaskMutation.mutate({
-            id:uuidv4(),
-            title:data.taskContent,
-        })
-         return navigate('/')
-    }
-    return (
-        <div>
-            <h1>TODO APP</h1>
-            <TaskForm onSubmit={handleSubmitForm} />
-            <TodoList  />
-        </div>
-    )
-}
-
-export default Home
+export default Home;

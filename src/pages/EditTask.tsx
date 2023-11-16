@@ -5,7 +5,6 @@ import TaskForm from '../components/TaskForm'
 
 
 interface EditTaskProps {
-    // Dodaj odpowiednie typy dla danych i funkcji obsługujących
 }
 
 const EditTask = () => {
