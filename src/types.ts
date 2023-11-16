@@ -13,4 +13,9 @@ export interface IFormInputs {
     EDIT="EDIT",
     DELETED = 'DELETED'
   }
-  
+ export interface IPagination {
+    tasks: Itask[];
+    handlePage: (page: any) => void;
+    isPreviousData: boolean;
+    page: number;
+  }

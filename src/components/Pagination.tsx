@@ -1,12 +1,7 @@
 import React from "react";
-import { Itask } from "../types";
+import { IPagination } from "../types";
 
-interface IPagination {
-  tasks: Itask[];
-  handlePage: (page: any) => void;
-  isPreviousData: boolean;
-  page: number;
-}
+
 const Pagination = ({
   page,
   tasks,
