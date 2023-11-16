@@ -1,8 +1,8 @@
 import { Itask, TaskStatus } from "./types";
 
-export const fetchTodoList = async () => {
+export const fetchTodoList = async (page:number) => {
   try {
-    const request = await fetch("http://localhost:3000/tasks");
+    const request = await fetch(`http://localhost:3000/tasks?_page=${page}&_limit=2`);
     return request.json();
   } catch (error) {
     console.log(error);
